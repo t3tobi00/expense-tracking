@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from datetime import date
+from datetime import date, datetime
 import db_helper
 from typing import List
 from pydantic import BaseModel
@@ -46,3 +46,17 @@ def get_analytics(dateRange: DateRange):
             'percentage': item['percentage']
         }
     return breakdown
+
+
+@app.post("/analytics/monthly/")
+def get_analytics_by_all_months():
+    summary = db_helper.fetch_monthly_expense_summary()
+    if summary is None:
+        raise HTTPException(status_code=500, detail="Error fetching monthly analytics")
+    for item in summary:
+        # convert date '%Y-%m' to month name
+        item['month'] = datetime.strptime(item['month'], '%Y-%m').strftime('%B %Y')
+        # format total amount to 2 decimal places
+        item['total'] = f"{item['total']:.2f}"
+
+    return summary
