@@ -94,6 +94,7 @@ pytest test/
 - `GET /expenses/{date}` - Retrieve expenses for a specific date
 - `POST /expenses/{date}` - Add or update expenses for a date
 - `POST /analytics/` - Get expense analytics for a date range
+- `POST /analytics/monthly/` - Get monthly expense analytics
 
 ## Technologies Used
 
